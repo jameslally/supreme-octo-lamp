@@ -1,0 +1,19 @@
+# Minimal requirements for Job Requirements Extractor
+# Install these first to get the basic functionality working
+
+# Core ML packages
+torch
+transformers
+sentence-transformers
+
+# Data processing
+numpy
+pandas
+scikit-learn
+
+# Web interface
+streamlit
+plotly
+
+# Utilities
+python-dotenv

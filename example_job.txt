@@ -1,0 +1,44 @@
+Senior Full Stack Developer
+
+We are looking for a Senior Full Stack Developer to join our innovative technology team. This is a full-time position with competitive salary and benefits.
+
+Required Qualifications:
+- 5+ years of experience in full-stack web development
+- Bachelor's degree in Computer Science, Software Engineering, or related field
+- Proficiency in Python, JavaScript/TypeScript, and React
+- Experience with modern web frameworks and libraries
+- Strong understanding of database design and SQL
+- Experience with cloud platforms (AWS, Azure, or GCP)
+- Knowledge of version control systems (Git)
+- Experience with CI/CD pipelines and DevOps practices
+
+Preferred Skills:
+- Master's degree in Computer Science or related field
+- Experience with Node.js and Express.js
+- Knowledge of microservices architecture
+- Experience with Docker and Kubernetes
+- Familiarity with machine learning concepts
+- Experience with agile development methodologies
+- Knowledge of testing frameworks (Jest, PyTest)
+- Experience with monitoring and logging tools
+
+Responsibilities:
+- Design and develop scalable web applications
+- Collaborate with cross-functional teams
+- Mentor junior developers
+- Participate in code reviews and technical discussions
+- Contribute to architectural decisions
+- Write clean, maintainable, and well-documented code
+- Troubleshoot and resolve technical issues
+- Stay updated with industry best practices
+
+Soft Skills:
+- Excellent communication and interpersonal skills
+- Strong problem-solving and analytical abilities
+- Ability to work independently and in teams
+- Leadership and mentoring capabilities
+- Adaptability to changing requirements
+- Strong attention to detail
+- Time management and organizational skills
+
+We offer a collaborative work environment, opportunities for professional growth, and the chance to work on cutting-edge technologies. If you are passionate about software development and meet our requirements, we would love to hear from you!
