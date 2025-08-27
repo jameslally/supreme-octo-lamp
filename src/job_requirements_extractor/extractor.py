@@ -26,14 +26,14 @@ class JobRequirementsExtractor:
                 device=0 if self.device == "cuda" else -1
             )
         except Exception as e:
-            print(f"Warning: Could not load NER model: {e}")
+            # Silently continue if NER model fails to load
             self.ner_pipeline = None
         
         # Initialize sentence transformer for similarity matching
         try:
             self.sentence_transformer = SentenceTransformer('all-MiniLM-L6-v2')
         except Exception as e:
-            print(f"Warning: Could not load sentence transformer: {e}")
+            # Silently continue if sentence transformer fails to load
             self.sentence_transformer = None
         
         # Common job requirement patterns
@@ -222,16 +222,29 @@ class JobRequirementsExtractor:
             # Filter for relevant entities
             relevant_entities = []
             for entity in entities:
-                if entity['score'] > 0.7:  # Only high-confidence entities
-                    relevant_entities.append({
-                        'text': entity['word'],
-                        'type': entity['entity_group'],
-                        'confidence': entity['score']
-                    })
+                try:
+                    # Ensure entity has required fields
+                    if not isinstance(entity, dict):
+                        continue
+                    
+                    # Handle both old and new entity formats
+                    entity_type = entity.get('entity_group') or entity.get('entity_type') or 'UNKNOWN'
+                    entity_text = entity.get('word') or entity.get('text') or str(entity)
+                    entity_score = entity.get('score') or 0.0
+                    
+                    if entity_score > 0.7:  # Only high-confidence entities
+                        relevant_entities.append({
+                            'text': entity_text,
+                            'type': entity_type,
+                            'confidence': entity_score
+                        })
+                except Exception as entity_error:
+                    # Silently continue on entity processing errors
+                    continue
             
             return relevant_entities
         except Exception as e:
-            print(f"Error in entity extraction: {e}")
+            # Return empty list on any extraction errors
             return []
 
     def _categorize_requirements(self, text: str) -> Dict[str, List[str]]:
@@ -363,86 +376,3 @@ class JobRequirementsExtractor:
             recommendations.append("This job has fewer requirements - may be more entry-level")
         
         return recommendations
-
-def main():
-    """Main function to demonstrate the job requirements extractor."""
-    # Sample job description
-    sample_job = """
-    Senior Software Engineer
-    
-    We are looking for a Senior Software Engineer to join our dynamic team. 
-    The ideal candidate must have at least 5+ years of experience in software development.
-    
-    Required Skills:
-    • Proficient in Python, Java, and JavaScript
-    • Experience with AWS cloud services
-    • Knowledge of Docker and Kubernetes
-    • Strong understanding of database design and SQL
-    • Experience with agile methodologies
-    • Git version control and CI/CD pipelines
-    • RESTful API design and development
-    
-    Preferred Qualifications:
-    • Master's degree in Computer Science or related field
-    • Experience with machine learning frameworks (TensorFlow, PyTorch)
-    • Knowledge of microservices architecture
-    • Leadership experience in technical teams
-    • Experience with monitoring tools (Prometheus, Grafana)
-    • Knowledge of security best practices
-    
-    The candidate should have excellent communication skills and be able to work in a fast-paced environment.
-    """
-    
-    # Initialize the extractor
-    extractor = JobRequirementsExtractor()
-    
-    # Extract requirements
-    print("=== Job Requirements Extractor ===\n")
-    print("Sample Job Description:")
-    print(sample_job)
-    print("\n" + "="*50 + "\n")
-    
-    # Analyze the job description
-    analysis = extractor.analyze_job_description(sample_job)
-    
-    # Print results
-    print("EXTRACTED REQUIREMENTS:")
-    print("-" * 30)
-    
-    if 'requirements' in analysis:
-        reqs = analysis['requirements']
-        
-        if 'individual_requirements' in reqs:
-            print(f"\n🔹 Individual Requirements (Bullet Points): {len(reqs['individual_requirements'])} found")
-            for i, req in enumerate(reqs['individual_requirements'], 1):
-                print(f"{i}. {req}")
-        
-        if 'text_requirements' in reqs:
-            print(f"\n📝 Text-based Requirements: {len(reqs['text_requirements'])} found")
-            for i, req in enumerate(reqs['text_requirements'], 1):
-                print(f"{i}. {req}")
-        
-        if 'categorized_requirements' in reqs:
-            print("\n🏷️ Categorized Requirements:")
-            for category, items in reqs['categorized_requirements'].items():
-                if items:
-                    print(f"\n{category.replace('_', ' ').title()}:")
-                    for item in items:
-                        print(f"  - {item}")
-        
-        if 'summary' in reqs:
-            summary = reqs['summary']
-            print(f"\nSummary:")
-            print(f"  - Total sentences: {summary.get('total_sentences', 0)}")
-            print(f"  - Requirement sentences: {summary.get('requirement_sentences', 0)}")
-            print(f"  - Estimated requirements: {summary.get('estimated_requirements', 0)}")
-    
-    print(f"\nJob Complexity Score: {analysis.get('complexity_score', 0):.2f}/10")
-    
-    if 'recommendations' in analysis:
-        print("\nRecommendations:")
-        for i, rec in enumerate(analysis['recommendations'], 1):
-            print(f"{i}. {rec}")
-
-if __name__ == "__main__":
-    main()

@@ -1,16 +1,33 @@
-# 💼 Job Requirements Extractor
+# Job Requirements Extractor
 
-An intelligent Python application that uses Hugging Face models to automatically extract and analyze requirements from job descriptions. Built with modern NLP techniques including Named Entity Recognition (NER), pattern matching, and semantic analysis.
+A comprehensive tool for extracting and analyzing requirements from job descriptions using advanced NLP techniques including Named Entity Recognition and pattern matching.
 
-## ✨ Features
+## 🏗️ Project Structure
 
-- **🤖 AI-Powered Extraction**: Uses state-of-the-art Hugging Face models for accurate requirement identification
-- **🔍 Multiple Extraction Methods**: Combines regex patterns, NER, and semantic analysis
-- **🏷️ Smart Categorization**: Automatically organizes requirements into logical categories
-- **📊 Comprehensive Analysis**: Provides complexity scores, requirement density, and insights
-- **💡 Personalized Recommendations**: Offers actionable advice based on extracted requirements
-- **🌐 Multiple Interfaces**: Web app (Streamlit), command-line, and Python library
-- **💾 Export Results**: Save analysis results in JSON format
+The project has been refactored into a proper Python package structure:
+
+```
+supreme-octo-lamp/
+├── src/
+│   ├── job_requirements_extractor/     # Main package
+│   │   ├── __init__.py                # Package initialization
+│   │   ├── __main__.py                # Module entry point
+│   │   ├── extractor.py               # Core extraction logic
+│   │   ├── batch_processor.py         # Batch processing functionality
+│   │   └── config.py                  # Configuration and constants
+│   ├── app.py                         # Streamlit web application
+│   └── cli.py                         # Command-line interface
+├── tests/                             # Test files
+│   ├── test_package_imports.py        # Package structure tests
+│   ├── test_improved.py               # Improved extraction tests
+│   └── test_sentence_extraction.py    # Sentence extraction tests
+├── setup.py                           # Package setup configuration
+├── pyproject.toml                     # Modern Python packaging config
+├── pytest.ini                         # Test configuration
+├── run_app.py                         # Streamlit app runner
+├── run_cli.py                         # CLI runner
+└── requirements.txt                    # Python dependencies
+```
 
 ## 🚀 Quick Start
 
@@ -19,272 +36,169 @@ An intelligent Python application that uses Hugging Face models to automatically
 1. **Clone the repository:**
    ```bash
    git clone <repository-url>
-   cd job_matcher
+   cd supreme-octo-lamp
    ```
 
-
-2. **Install dependencies:**
+2. **Create a virtual environment:**
    ```bash
    python -m venv venv
-   source venv/bin/activate    # macOS/Linux
-   venv\Scripts\activate       # Windows
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
    pip install -r requirements.txt
    ```
 
-3. **Run the web application:**
+4. **Install the package in development mode:**
    ```bash
-   streamlit run app.py
+   pip install -e .
    ```
 
-4. **Or use the command-line interface:**
-   ```bash
-   python cli.py -t "We are looking for a Python developer with 3+ years experience"
-   ```
+### Usage
 
-## 🎯 Use Cases
+#### Web Application (Streamlit)
 
-- **Job Seekers**: Analyze job requirements to optimize resumes and applications
-- **HR Professionals**: Review and standardize job postings
-- **Career Counselors**: Provide data-driven guidance to clients
-- **Recruiters**: Quickly assess candidate-job fit
-- **Researchers**: Analyze job market trends and requirements
+Run the Streamlit web application:
 
-## 🏗️ Architecture
+```bash
+# Option 1: Use the runner script
+python run_app.py
 
-The application uses a modular architecture with three main components:
+# Option 2: Run directly with streamlit
+streamlit run src/app.py
 
-### 1. Core Extractor (`job_requirements_extractor.py`)
-- **JobRequirementsExtractor Class**: Main extraction engine
-- **Multiple Extraction Methods**: Pattern matching, NER, categorization
-- **Text Processing**: Cleaning, preprocessing, and analysis
-- **Complexity Scoring**: Algorithmic assessment of job difficulty
+# Option 3: Run as a module
+python -m streamlit run src/app.py
+```
 
-### 2. Web Interface (`app.py`)
-- **Streamlit Application**: User-friendly web interface
-- **Interactive Features**: File upload, real-time analysis, visualizations
-- **Responsive Design**: Works on desktop and mobile devices
-- **Results Export**: Download analysis in JSON format
+#### Command Line Interface
 
-### 3. Command Line Interface (`cli.py`)
-- **CLI Tool**: Terminal-based usage
-- **File Processing**: Analyze text files and save results
-- **Batch Processing**: Handle multiple job descriptions
-- **Verbose Output**: Detailed analysis information
+Use the CLI for batch processing and automation:
+
+```bash
+# Option 1: Use the runner script
+python run_cli.py
+
+# Option 2: Run directly
+python src/cli.py
+
+# Option 3: Use the installed command (after pip install -e .)
+job-extractor
+
+# Examples:
+python src/cli.py -t "We are looking for a Python developer with 3+ years experience"
+python src/cli.py -f job_description.txt -o results.json
+```
+
+#### Python Package
+
+Import and use the package in your own code:
+
+```python
+from job_requirements_extractor import JobRequirementsExtractor
+
+# Create an extractor instance
+extractor = JobRequirementsExtractor()
+
+# Extract requirements from job description
+job_description = "We are looking for a Python developer..."
+requirements = extractor.extract_requirements(job_description)
+
+print(requirements)
+```
+
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src/job_requirements_extractor
+
+# Run specific test file
+pytest tests/test_package_imports.py
+```
+
+## 📦 Package Development
+
+### Building the Package
+
+```bash
+# Build source distribution
+python setup.py sdist
+
+# Build wheel
+python setup.py bdist_wheel
+```
+
+### Installing in Development Mode
+
+```bash
+pip install -e .
+```
+
+This allows you to modify the source code and see changes immediately without reinstalling.
 
 ## 🔧 Configuration
 
-### Model Selection
-The application supports multiple Hugging Face models:
+The package configuration is centralized in `src/job_requirements_extractor/config.py`. Key settings include:
 
-- **Default NER Model**: `dbmdz/bert-large-cased-finetuned-conll03-english`
-- **Alternative Models**: `microsoft/DialoGPT-medium` and others
-- **Custom Models**: Use any compatible Hugging Face model
+- `DEFAULT_MODEL`: Default Hugging Face model for extraction
+- `NER_CONFIDENCE_THRESHOLD`: Minimum confidence for entity extraction
+- `REQUIREMENT_PATTERNS`: Regex patterns for requirement detection
+- `REQUIREMENT_CATEGORIES`: Categories for organizing requirements
 
-### Confidence Thresholds
-- **Entity Confidence**: Minimum score for NER entities (default: 0.7)
-- **Pattern Matching**: Configurable regex patterns for requirements
-- **Semantic Analysis**: Adjustable similarity thresholds
+## 📚 API Reference
 
-## 📊 Output Format
+### JobRequirementsExtractor
 
-The application generates comprehensive analysis results:
+Main class for extracting requirements from job descriptions.
 
-```json
-{
-  "requirements": {
-    "text_requirements": ["5+ years of experience", "Python proficiency"],
-    "entity_requirements": [{"text": "Python", "type": "SKILL", "confidence": 0.95}],
-    "categorized_requirements": {
-      "technical_skills": ["Python", "Java", "AWS"],
-      "experience": ["5+ years", "senior level"],
-      "education": ["Bachelor's degree"]
-    },
-    "summary": {
-      "total_sentences": 15,
-      "requirement_sentences": 8,
-      "requirement_density": 0.53,
-      "estimated_requirements": 12
-    }
-  },
-  "text_length": 1250,
-  "word_count": 200,
-  "complexity_score": 7.2,
-  "recommendations": [
-    "Focus on highlighting relevant technical skills in your resume",
-    "Emphasize relevant work experience and achievements"
-  ]
-}
-```
+**Methods:**
+- `extract_requirements(job_description)`: Extract all requirements
+- `_extract_text_patterns(text)`: Extract requirements using regex patterns
+- `_extract_entities(text)`: Extract named entities using NER
+- `_categorize_requirements(text)`: Categorize requirements by type
 
-## 🎨 Web Interface Features
+### BatchJobProcessor
 
-### Input Methods
-- **Text Input**: Paste job descriptions directly
-- **File Upload**: Support for .txt, .md files
-- **Sample Data**: Built-in examples for testing
+Process multiple job descriptions in batch.
 
-### Visualization
-- **Metrics Dashboard**: Key statistics at a glance
-- **Interactive Charts**: Requirement density and analysis summary
-- **Responsive Layout**: Optimized for all screen sizes
-
-### Export Options
-- **JSON Download**: Complete analysis results
-- **Raw Data View**: Expandable detailed information
-- **Formatted Display**: Clean, organized presentation
-
-## 💻 Command Line Usage
-
-### Basic Commands
-
-```bash
-# Analyze text from command line
-python cli.py -t "We are looking for a Python developer with 3+ years experience"
-
-# Analyze text from file
-python cli.py -f job_description.txt
-
-# Save results to file
-python cli.py -f job_description.txt -o results.json
-
-# Verbose output
-python cli.py -f job_description.txt -v
-
-# Use custom model
-python cli.py -f job_description.txt --model custom-model-name
-
-# Adjust confidence threshold
-python cli.py -f job_description.txt --confidence 0.8
-```
-
-### Command Line Options
-
-| Option | Description | Default |
-|--------|-------------|---------|
-| `-t, --text` | Job description text | - |
-| `-f, --file` | Input file path | - |
-| `-o, --output` | Output JSON file | - |
-| `-v, --verbose` | Verbose output | False |
-| `--model` | Hugging Face model | dbmdz/bert-large-cased-finetuned-conll03-english |
-| `--confidence` | Entity confidence threshold | 0.7 |
-
-## 🔬 Technical Details
-
-### NLP Techniques Used
-
-1. **Named Entity Recognition (NER)**
-   - BERT-based model for entity extraction
-   - Identifies skills, experience levels, qualifications
-   - Configurable confidence thresholds
-
-2. **Pattern Matching**
-   - Regex patterns for common requirement formats
-   - Years of experience, education levels, skill requirements
-   - Customizable pattern library
-
-3. **Semantic Analysis**
-   - Sentence transformers for similarity matching
-   - Requirement categorization and clustering
-   - Context-aware analysis
-
-4. **Text Processing**
-   - Advanced text cleaning and preprocessing
-   - Sentence segmentation and analysis
-   - Complexity scoring algorithms
-
-### Performance Optimization
-
-- **GPU Acceleration**: Automatic CUDA detection and usage
-- **Model Caching**: Efficient model loading and reuse
-- **Batch Processing**: Handle multiple documents efficiently
-- **Memory Management**: Optimized for large text processing
-
-## 🚧 Requirements
-
-### System Requirements
-- **Python**: 3.8 or higher
-- **Memory**: 4GB RAM minimum (8GB recommended)
-- **Storage**: 2GB free space for models
-- **GPU**: Optional but recommended for faster processing
-
-### Dependencies
-- **Core**: transformers, torch, sentence-transformers
-- **Web**: streamlit, plotly, pandas
-- **Utilities**: numpy, scikit-learn, python-dotenv
-
-## 📈 Performance Benchmarks
-
-| Text Length | Processing Time | Memory Usage |
-|-------------|----------------|--------------|
-| 1,000 chars | ~2-3 seconds | ~500MB |
-| 5,000 chars | ~5-8 seconds | ~800MB |
-| 10,000 chars | ~10-15 seconds | ~1.2GB |
-
-*Benchmarks on CPU (Intel i7), GPU performance significantly faster*
-
-## 🔒 Security & Privacy
-
-- **Local Processing**: All analysis happens locally
-- **No Data Transmission**: Job descriptions never leave your system
-- **Model Safety**: Uses only verified Hugging Face models
-- **Input Validation**: Robust error handling and validation
+**Methods:**
+- `process_files(file_paths)`: Process multiple files
+- `process_texts(texts)`: Process multiple text strings
+- `save_results(results, output_file)`: Save results to file
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our contributing guidelines:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Run the test suite
+6. Submit a pull request
 
-1. **Fork the repository**
-2. **Create a feature branch**
-3. **Make your changes**
-4. **Add tests if applicable**
-5. **Submit a pull request**
+## 📄 License
 
-### Development Setup
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-```bash
-# Clone and setup
-git clone <repository-url>
-cd job_matcher
+## 🆘 Support
 
-# Install development dependencies
-pip install -r requirements.txt
-pip install pytest black flake8
+If you encounter any issues or have questions:
 
-# Run tests
-pytest
+1. Check the existing issues
+2. Create a new issue with detailed information
+3. Include error messages and reproduction steps
 
-# Format code
-black .
+## 🔄 Migration from Old Structure
 
-# Lint code
-flake8
-```
+If you were using the old structure with files in the root directory:
 
-## 📝 License
+- **Old import:** `from job_requirements_extractor import JobRequirementsExtractor`
+- **New import:** `from job_requirements_extractor import JobRequirementsExtractor` (same!)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Hugging Face**: For providing excellent NLP models and libraries
-- **Streamlit**: For the amazing web framework
-- **Open Source Community**: For continuous improvements and feedback
-
-## 📞 Support
-
-- **Issues**: Report bugs and feature requests on GitHub
-- **Documentation**: Check the code comments and docstrings
-- **Community**: Join our discussions and share your use cases
-
-## 🔮 Future Roadmap
-
-- **Multi-language Support**: Analyze job descriptions in different languages
-- **Resume Matching**: Compare candidate resumes with job requirements
-- **Market Analysis**: Aggregate and analyze job market trends
-- **API Service**: RESTful API for integration with other systems
-- **Mobile App**: Native mobile applications
-- **Advanced Analytics**: Machine learning insights and predictions
-
----
-
-**Made with ❤️ for the job matching community**
+The package structure maintains backward compatibility while providing better organization and installability.
